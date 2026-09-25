@@ -10,6 +10,17 @@
 
 ---
 
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Installation via JitPack](#installation-via-jitpack)
+- [Usage Examples](#usage-examples)
+- [Error Handling](#error-handling)
+- [Tech Stack](#tech-stack)
+- [License](#license)
+
+---
+
 ## Overview
 
 `jev-kmp` is a lightweight, high-performance, strongly-typed **Kotlin Multiplatform (KMP)** SDK wrapper for the TypeSafe Jev API. It supports **Android**, **iOS**, and **JVM** targets out-of-the-box using **Ktor Client** and **kotlinx.serialization**.
