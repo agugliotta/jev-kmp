@@ -2,8 +2,8 @@
 
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin-Multiplatform-blue.svg?logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
 [![Ktor Client](https://img.shields.io/badge/Ktor-Client-orange.svg?logo=ktor)](https://ktor.io/)
+[![JitPack](https://jitpack.io/v/agugliotta/jev-kmp.svg)](https://jitpack.io/#agugliotta/jev-kmp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Maven Central](https://img.shields.io/badge/Maven%2520Central-1.0.0-blue)](https://maven.central.org)
 
 > [!CAUTION]
 > **UNOFFICIAL DISCLAIMER**: This repository and SDK are **unofficial** community implementations. This project is **NOT** endorsed, certified, sponsored, or affiliated with [TypeSafe](https://typesafe.ai) or **System One AI** in any way. All official trademarks, product names, and APIs belong to their respective owners.
@@ -30,21 +30,38 @@ The Jev API is synchronous and non-generative (focused on probabilistic decision
 
 ---
 
-## Installation
+## Installation via JitPack
 
-Add the dependency to your shared KMP module `build.gradle.kts`:
+This library is published via [JitPack](https://jitpack.io/#agugliotta/jev-kmp).
+
+### 1. Add JitPack repository
+In your root `build.gradle.kts` (or `settings.gradle.kts` dependency resolution management):
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+
+### 2. Add Dependency
+In your module's `build.gradle.kts` (e.g., `commonMain` dependencies):
 
 ```kotlin
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("com.agugliotta:jev-kmp:1.0.0")
+                implementation("com.github.agugliotta:jev-kmp:v1.0.0")
             }
         }
     }
 }
 ```
+*(You can also use a specific commit hash like `implementation("com.github.agugliotta:jev-kmp:main-SNAPSHOT")` or a commit SHA).*
 
 ---
 
