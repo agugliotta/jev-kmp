@@ -2,47 +2,71 @@ package com.agugliotta.jev.models
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.json.JsonElement
 
 /**
- * Request payload for evaluating a probabilistic boolean statement (`noul`).
+ * Request payload for evaluating state against typed questions using the TypeSafe System One API (`/v1/systemone`).
  *
- * @property state The context or current state description.
- * @property statement The statement to evaluate probabilistically against the state.
+ * @property state The content to evaluate (string, object, or array).
+ * @property model The model handling the request (defaults to `"jev-latest"`).
+ * @property questions Map of typed question payloads keyed by custom IDs.
  */
 @Serializable
-public data class NoulRequest(
+public data class SystemOneRequest(
     val state: String,
-    val statement: String
+    val model: String = "jev-latest",
+    val questions: Map<String, QuestionPayload>
 )
 
 /**
- * Response payload for a probabilistic boolean evaluation (`noul`).
- *
- * @property probability The evaluated probability value between 0.0 and 1.0.
+ * Represents a typed question (`noul`, `choice`, or `score`) sent to the TypeSafe API.
  */
 @Serializable
-public data class NoulResponse(
-    val probability: Double
+public data class QuestionPayload(
+    val type: String,
+    val instructions: String,
+    val criteria: JsonElement? = null
 )
 
 /**
- * Request payload for evaluating a choice against a strict list of options.
+ * Response payload from the TypeSafe System One API.
  *
- * @property state The context or current state description.
- * @property options The strict list of available options to choose from.
+ * @property model The model that performed the evaluation.
+ * @property answers Map of answers corresponding to the request question IDs.
+ * @property usage Token usage statistics (`input_tokens`, `output_tokens`).
  */
 @Serializable
-public data class ChoiceRequest(
-    val state: String,
-    val options: List<String>
+public data class SystemOneResponse(
+    val model: String,
+    val answers: Map<String, AnswerPayload>,
+    val usage: Usage? = null
+)
+
+/**
+ * Token usage statistics for an API request.
+ */
+@Serializable
+public data class Usage(
+    @SerialName("input_tokens") val inputTokens: Int,
+    @SerialName("output_tokens") val outputTokens: Int
+)
+
+/**
+ * Raw answer payload returned by the API for a question.
+ */
+@Serializable
+public data class AnswerPayload(
+    val type: String,
+    val noul: Double? = null,
+    val choice: String? = null,
+    val probabilities: Map<String, Double>? = null,
+    val confidence: Double? = null,
+    val score: Double? = null,
+    val legend: Map<String, String>? = null
 )
 
 /**
  * Distribution result for an individual option in a choice evaluation.
- *
- * @property option The specific option string.
- * @property probability The calculated probability for this option.
- * @property confidence The confidence score associated with this option's evaluation.
  */
 @Serializable
 public data class ChoiceOptionResult(
@@ -52,37 +76,12 @@ public data class ChoiceOptionResult(
 )
 
 /**
- * Response payload for a choice evaluation (`choice`).
- *
- * @property chosenOption The winning option chosen by the evaluation.
- * @property results The full list of option distribution results.
- * @property confidence The overall confidence score of the evaluation.
+ * Structured response for a choice evaluation (`choice`).
  */
 @Serializable
 public data class JevChoiceResponse(
     @SerialName("chosen_option") val chosenOption: String,
     val results: List<ChoiceOptionResult>,
-    val confidence: Double
-)
-
-/**
- * Request payload for evaluating a score against ordered semantic criteria (`score`).
- *
- * @property state The context or current state description.
- * @property criteria The ordered scale or criteria definition.
- */
-@Serializable
-public data class ScoreRequest(
-    val state: String,
-    val criteria: String
-)
-
-/**
- * Response payload for a score evaluation (`score`).
- *
- * @property score The evaluated numeric score as a Double.
- */
-@Serializable
-public data class ScoreResponse(
-    val score: Double
+    val confidence: Double,
+    val probabilities: Map<String, Double>
 )

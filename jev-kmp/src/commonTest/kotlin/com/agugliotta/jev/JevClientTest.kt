@@ -18,10 +18,16 @@ class JevClientTest {
     }
 
     @Test
-    fun testNoulRequestSerialization() {
-        val request = NoulRequest(state = "User logged in", statement = "User will purchase item")
-        val jsonString = Json.encodeToString(NoulRequest.serializer(), request)
+    fun testSystemOneRequestSerialization() {
+        val request = SystemOneRequest(
+            state = "User logged in",
+            questions = mapOf(
+                "q1" to QuestionPayload(type = "noul", instructions = "User will purchase item")
+            )
+        )
+        val jsonString = Json.encodeToString(SystemOneRequest.serializer(), request)
         assertTrue(jsonString.contains("User logged in"))
+        assertTrue(jsonString.contains("noul"))
         assertTrue(jsonString.contains("User will purchase item"))
     }
 

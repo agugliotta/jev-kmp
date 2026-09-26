@@ -49,7 +49,7 @@ public suspend fun main() {
         // 5. Evaluate Score against semantic criteria
         val score = client.evaluateScore(
             state = currentState,
-            criteria = "Urgency level of user frustration from 0.0 to 10.0"
+            criteriaDescription = "Urgency level of user frustration from 0.0 to 10.0"
         )
         println("Frustration Score: $score")
 
